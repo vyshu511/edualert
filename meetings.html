@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEETING SCHEDULE - Edu Alert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ===== Global Styles ===== */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* ===== Header Styles ===== */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-heading {
+            font-size: 2.5rem;
+            margin-bottom: 0;
+            font-weight: 700;
+        }
+
+        /* ===== Navigation Bar ===== */
+        .navbar {
+            background-color: var(--primary-dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Main Content ===== */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* ===== Table Styles ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        tr:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            transform: scale(1.005);
+            transition: all 0.2s ease;
+        }
+
+        td {
+            color: var(--dark);
+        }
+
+        /* ===== Footer Styles ===== */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--primary-dark);
+            color: white;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+            
+            .container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="main-heading">Edu Alert</h1>
+    </header>
+    
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="help.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li><a href="mailto:edualert2025@gmail.com"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>MEETING SCHEDULE</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fas fa-users"></i> Meeting Type</th>
+                    <th><i class="fas fa-user-friends"></i> Participants</th>
+                    <th><i class="fas fa-clock"></i> Frequency</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CRC Meeting</td>
+                    <td>HOD, CRs</td>
+                    <td>Every 15 Days</td>
+                </tr>
+                <tr>
+                    <td>DDC Meeting</td>
+                    <td>HOD, DDC Members of Department</td>
+                    <td>Before and After 2 weeks of Sem</td>
+                </tr>
+                <tr>
+                    <td>PAQIC Meeting</td>
+                    <td>HOD, Faculty</td>
+                    <td>Before Starting of 2 Weeks of Sem</td>
+                </tr>
+                <tr>
+                    <td>BOS Meeting</td>
+                    <td>Deans, HODs</td>
+                    <td>Every 2 Years</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Edu Alert - Meeting Schedule. All Rights Reserved.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Calendar Upload</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* ===== Global Styles ===== */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --secondary: #4cc9f0;
+      --accent: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+    }
+
+    body, h1, h2, p, ul, li {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== Container Styles ===== */
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      margin: 1rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* ===== Button Styles ===== */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+      border: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 4px 8px rgba(67, 97, 238, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-danger {
+      background-color: var(--accent);
+      color: white;
+      box-shadow: 0 4px 8px rgba(247, 37, 133, 0.25);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(247, 37, 133, 0.3);
+    }
+
+    .btn-outline {
+      background-color: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* ===== Form Elements ===== */
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      margin: 1rem 0;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    select:hover {
+      border-color: var(--primary-dark);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* ===== Calendar Preview ===== */
+    .calendar-preview {
+      max-width: 100%;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: block;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Year Selection Screen -->
+  <div class="container" id="yearSelection">
+    <h1>Academic Calendar</h1>
+    <h2>Select Year</h2>
+    <select id="yearDropdown">
+      <option value="" disabled selected>-- Select Year --</option>
+      <option value="1st">1st Year</option>
+      <option value="2nd">2nd Year</option>
+      <option value="3rd">3rd Year</option>
+      <option value="4th">4th Year</option>
+    </select>
+    <button id="selectYearBtn" class="btn btn-primary">Continue</button>
+  </div>
+
+  <!-- Upload Screen -->
+  <div class="container hidden" id="uploadSection">
+    <h2 id="selectedYearTitle">Year Calendar</h2>
+    
+    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png">
+    
+    <button id="uploadBtn" class="btn btn-primary">
+      <i class="fas fa-upload"></i> Upload Calendar
+    </button>
+    
+    <div id="previewContainer" class="hidden">
+      <h3>Current Calendar</h3>
+      <img id="calendarPreview" class="calendar-preview" alt="Calendar Preview">
+      <button id="removeBtn" class="btn btn-danger">
+        <i class="fas fa-trash"></i> Remove Calendar
+      </button>
+    </div>
+    
+    <button id="backBtn" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back to Year Selection
+    </button>
+  </div>
+
+  <script>
+    // DOM Elements
+    const yearSelection = document.getElementById('yearSelection');
+    const uploadSection = document.getElementById('uploadSection');
+    const yearDropdown = document.getElementById('yearDropdown');
+    const selectYearBtn = document.getElementById('selectYearBtn');
+    const selectedYearTitle = document.getElementById('selectedYearTitle');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const previewContainer = document.getElementById('previewContainer');
+    const calendarPreview = document.getElementById('calendarPreview');
+    const removeBtn = document.getElementById('removeBtn');
+    const backBtn = document.getElementById('backBtn');
+
+    // Current selected year
+    let currentYear = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      checkExistingCalendars();
+    });
+
+    // Year selection handler
+    selectYearBtn.addEventListener('click', () => {
+      const selectedYear = yearDropdown.value;
+      if (selectedYear) {
+        currentYear = selectedYear;
+        showUploadSection(selectedYear);
+      } else {
+        alert('Please select a year');
+      }
+    });
+
+    // Upload button handler
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // File input handler
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.type.match('image.*') || file.type === 'application/pdf') {
+          uploadCalendar(file);
+        } else {
+          alert('Please upload an image (JPG, PNG) or PDF file');
+        }
+      }
+    });
+
+    // Remove button handler
+    removeBtn.addEventListener('click', () => {
+      removeCalendar();
+    });
+
+    // Back button handler
+    backBtn.addEventListener('click', () => {
+      goBackToYearSelection();
+    });
+
+    // Functions
+    function checkExistingCalendars() {
+      // Check localStorage for existing calendars
+      for (let i = 0; i < yearDropdown.options.length; i++) {
+        const year = yearDropdown.options[i].value;
+        if (year && localStorage.getItem(`academicCalendar_${year}`)) {
+          // Calendar exists for this year
+        }
+      }
+    }
+
+    function showUploadSection(year) {
+      yearSelection.classList.add('hidden');
+      uploadSection.classList.remove('hidden');
+      selectedYearTitle.textContent = `${year} Year Calendar`;
+
+      // Check if calendar already exists for this year
+      const existingCalendar = localStorage.getItem(`academicCalendar_${year}`);
+      if (existingCalendar) {
+        calendarPreview.src = existingCalendar;
+        previewContainer.classList.remove('hidden');
+      } else {
+        previewContainer.classList.add('hidden');
+      }
+    }
+
+    function uploadCalendar(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Save to localStorage
+        localStorage.setItem(`academicCalendar_${currentYear}`, e.target.result);
+        
+        // Show preview
+        calendarPreview.src = e.target.result;
+        previewContainer.classList.remove('hidden');
+        
+        // Reset file input
+        fileInput.value = '';
+      };
+      
+      if (file.type.match('image.*')) {
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        // For PDFs, show a PDF icon
+        calendarPreview.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%234361ee' d='M80 10H30L10 30v50c0 5.5 4.5 10 10 10h50c5.5 0 10-4.5 10-10V20c0-5.5-4.5-10-10-10zm-5 65H25V35h50v40z'/%3E%3Ctext x='50%' y='60%' font-family='Arial' font-size='20' text-anchor='middle' fill='%234361ee'%3EPDF%3C/text%3E%3C/svg%3E";
+        previewContainer.classList.remove('hidden');
+      }
+    }
+
+    function removeCalendar() {
+      if (confirm('Are you sure you want to remove this calendar?')) {
+        localStorage.removeItem(`academicCalendar_${currentYear}`);
+        previewContainer.classList.add('hidden');
+      }
+    }
+
+    function goBackToYearSelection() {
+      uploadSection.classList.add('hidden');
+      yearSelection.classList.remove('hidden');
+      yearDropdown.value = "";
+      currentYear = null;
+    }
+  </script>
+</body>
+</html>
